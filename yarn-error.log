@@ -1,0 +1,68 @@
+Arguments: 
+  /Users/machty/.volta/tools/image/node/16.16.0/bin/node /Users/machty/.volta/tools/image/yarn/1.22.19/bin/yarn.js
+
+PATH: 
+  /Users/machty/.volta/tools/image/npm/8.1.0/bin:/Users/machty/.volta/tools/image/yarn/1.22.19/bin:/Users/machty/.volta/tools/image/node/16.16.0/bin:/Users/machty/.deno/bin:/Users/machty/.pyenv/shims:/Users/machty/.rbenv/shims:/opt/homebrew/bin:/Users/machty/Library/pnpm:/usr/local/bin:/Users/machty/.volta/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/machty/.deno/bin:/Users/machty/.rbenv/shims:/opt/homebrew/bin:/Users/machty/Library/pnpm:/Users/machty/.volta/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.16.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@glimmer/reference/-/reference-0.62.5.tgz: Request failed "500 Internal Server Error"
+      at ResponseError.ExtendableBuiltin (/Users/machty/.volta/tools/image/yarn/1.22.19/lib/cli.js:696:66)
+      at new ResponseError (/Users/machty/.volta/tools/image/yarn/1.22.19/lib/cli.js:802:124)
+      at Request.<anonymous> (/Users/machty/.volta/tools/image/yarn/1.22.19/lib/cli.js:66215:16)
+      at Request.emit (node:events:527:28)
+      at Request.module.exports.Request.onRequestResponse (/Users/machty/.volta/tools/image/yarn/1.22.19/lib/cli.js:141767:10)
+      at ClientRequest.emit (node:events:527:28)
+      at HTTPParser.parserOnIncomingClient (node:_http_client:631:27)
+      at HTTPParser.parserOnHeadersComplete (node:_http_common:128:17)
+      at TLSSocket.socketOnData (node:_http_client:494:22)
+      at TLSSocket.emit (node:events:527:28)
+
+npm manifest: 
+  {
+    "name": "ember-concurrency-codemods",
+    "version": "0.1.0",
+    "scripts": {
+      "lint": "eslint --cache .",
+      "test": "codemod-cli test",
+      "test:coverage": "codemod-cli test --coverage",
+      "update-docs": "codemod-cli update-docs",
+      "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
+    },
+    "bin": "./bin/cli.js",
+    "keywords": [
+      "codemod-cli"
+    ],
+    "dependencies": {
+      "codemod-cli": "^3.2.0"
+    },
+    "devDependencies": {
+      "coveralls": "^3.1.0",
+      "eslint": "^8.22.0",
+      "eslint-config-prettier": "^8.5.0",
+      "eslint-plugin-node": "^11.1.0",
+      "eslint-plugin-prettier": "^4.2.1",
+      "jest": "^26.6.3",
+      "prettier": "^2.7.1"
+    },
+    "engines": {
+      "node": "10.* || 12.* || >= 14"
+    },
+    "jest": {
+      "testEnvironment": "node"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
