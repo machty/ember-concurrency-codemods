@@ -52,6 +52,7 @@ module.exports = function transformer(file, api) {
           j.identifier(p.node.key.name),
           j.callExpression(j.identifier(taskApiName), [j.thisExpression(), asyncArrowFn])
         );
+        newClassProperty.comments = p.node.comments;
         const q = jp.replaceWith(newClassProperty);
         convertYieldsToAwaits(q);
       });
@@ -77,6 +78,7 @@ module.exports = function transformer(file, api) {
             asyncArrowFn,
           ])
         );
+        newClassProperty.comments = p.node.comments;
         const q = jp.replaceWith(newClassProperty);
         convertYieldsToAwaits(q);
       });
@@ -107,6 +109,7 @@ module.exports = function transformer(file, api) {
           j.identifier(p.node.key.name),
           j.callExpression(j.identifier(taskApiName), [j.thisExpression(), asyncArrowFn])
         );
+        newClassProperty.comments = p.node.comments;
         const q = jp.replaceWith(newClassProperty);
         convertYieldsToAwaits(q);
       });
@@ -159,6 +162,7 @@ module.exports = function transformer(file, api) {
             asyncArrowFn,
           ])
         );
+        newClassProperty.comments = p.node.comments;
         const q = jp.replaceWith(newClassProperty);
         convertYieldsToAwaits(q);
       });

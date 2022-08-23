@@ -1,19 +1,28 @@
 import { task, timeout } from 'ember-concurrency';
 
-// TODO: try another test where `task` isn't imported, but needs to be added
+// TODO: top comment
 
+/**
+ * class comment
+ */
 export default class MyObject {
+  // begin comment a
   @task *a(uid: string) {
     yield timeout(1);
   }
-
+  // end comment a
+  
+  // begin comment b
   @task({ drop: true }) *b(this: MyObject, uid: string) {
     yield timeout(1);
   }
+  // end comment b
 
+  // begin comment c
   @task({ drop: true }) *c(uid: string) {
     yield timeout(1);
   }
+  // end comment c
 
   @task(function* (uid: string) {
     yield timeout(1);
