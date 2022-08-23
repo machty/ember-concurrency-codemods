@@ -1,5 +1,5 @@
 {
-  "name": "ember-concurrency-codemods",
+  "name": "machty-ember-concurrency-codemods",
   "version": "0.1.0",
   "scripts": {
     "lint": "eslint --cache .",
