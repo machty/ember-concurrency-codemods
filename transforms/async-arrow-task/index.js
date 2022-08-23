@@ -26,7 +26,7 @@ module.exports = function transformer(file, api) {
   }
 
   function asyncArrowFunctionExpression(fn) {
-    const params = fn.params.filter(p => {
+    const params = fn.params.filter((p) => {
       // Filter out any case of a TypeScript `this: ComponentClass`
       return p.name !== 'this';
     });
@@ -67,6 +67,36 @@ module.exports = function transformer(file, api) {
       let newClassProperty = j.classProperty(
         j.identifier(p.node.key.name),
         j.callExpression(j.identifier('task'), [j.thisExpression(), ...decoratorArgs, asyncArrowFn])
+      );
+      const q = jp.replaceWith(newClassProperty);
+      convertYieldsToAwaits(q);
+    });
+
+  // Transform
+  // - ClassProperty @task(function* (uid: string) { yield timeout(1); }) d: any;
+  // - ClassProperty d = task(this, async (uid: string) => { await timeout(1); });
+  root
+    .find(j.ClassProperty, {
+      decorators: [
+        {
+          expression: {
+            type: 'CallExpression',
+            callee: { name: 'task' },
+            arguments: [{ type: 'FunctionExpression', generator: true }],
+          },
+        },
+      ],
+    })
+    .forEach((p) => {
+      const jp = j(p);
+
+      const decoratorGeneratorFn = p.value.decorators[0].expression.arguments[0];
+
+      const asyncArrowFn = asyncArrowFunctionExpression(decoratorGeneratorFn);
+
+      let newClassProperty = j.classProperty(
+        j.identifier(p.node.key.name),
+        j.callExpression(j.identifier('task'), [j.thisExpression(), asyncArrowFn])
       );
       const q = jp.replaceWith(newClassProperty);
       convertYieldsToAwaits(q);
