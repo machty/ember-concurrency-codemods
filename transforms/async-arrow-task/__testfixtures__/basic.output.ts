@@ -1,4 +1,4 @@
-import { task, timeout, restartableTask } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 
 // TODO: try another test where `task` isn't imported, but needs to be added
 
