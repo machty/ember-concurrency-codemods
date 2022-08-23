@@ -25,20 +25,16 @@ export default class MyObject {
     await timeout(1);
   });
 
-  f = task(
-    this,
-    {
-      drop: true,
-      enqueue: true,
-      restartable: true,
-      keepLatest: true,
-      maxConcurrency: 3,
-      group: 'myTaskGroup',
-    },
-    async (uid: string) => {
-      await timeout(1);
-    }
-  );
+  f = task(this, {
+    group: 'myTaskGroup',
+    maxConcurrency: 3,
+    keepLatest: true,
+    restartable: true,
+    enqueue: true,
+    drop: true
+  }, async (uid: string) => {
+    await timeout(1);
+  });
 
   rt = restartableTask(this, async (uid: string) => {
     await timeout(1);
