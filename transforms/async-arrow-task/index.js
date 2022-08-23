@@ -102,6 +102,54 @@ module.exports = function transformer(file, api) {
       convertYieldsToAwaits(q);
     });
 
+  // Transform
+  // - ClassProperty: @task(function* (uid: string) { yield timeout(1); }).drop() e: any;
+  // - ClassProperty: e = task(this, { drop: true }, async (uid: string) => { await timeout(1); });
+  root
+    .find(j.ClassProperty, {
+      decorators: [
+        {
+          expression: {
+            type: 'CallExpression',
+            callee: { type: 'MemberExpression' },
+          },
+        },
+      ],
+    })
+    .forEach((p) => {
+      const jp = j(p);
+
+      const optionProperties = [];
+
+      // We have to loop through the chain of method calls and amass them into an options object literal.
+      let memberCallExpression = p.node.decorators[0].expression;
+      while (
+        memberCallExpression &&
+        memberCallExpression.type === 'CallExpression' &&
+        memberCallExpression.callee.type === 'MemberExpression'
+      ) {
+        let memberExpression = memberCallExpression.callee;
+        const optionName = memberExpression.property.name; // e.g. for .drop(), optionName is "drop"
+        const args = memberCallExpression.arguments;
+        const optionValue = args[0] || j.booleanLiteral(true);
+
+        optionProperties.push(j.objectProperty(j.identifier(optionName), optionValue));
+
+        memberCallExpression = memberCallExpression.callee.object;
+      }
+
+      const optionsObject = j.objectExpression(optionProperties);
+
+      const asyncArrowFn = asyncArrowFunctionExpression(memberCallExpression.arguments[0]);
+
+      let newClassProperty = j.classProperty(
+        j.identifier(p.node.key.name),
+        j.callExpression(j.identifier('task'), [j.thisExpression(), optionsObject, asyncArrowFn])
+      );
+      const q = jp.replaceWith(newClassProperty);
+      convertYieldsToAwaits(q);
+    });
+
   return root.toSource();
 };
 

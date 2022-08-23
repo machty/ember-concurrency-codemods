@@ -19,7 +19,9 @@ export default class MyObject {
     await timeout(1);
   });
 
-  e = task(this, { drop: true }, async (uid: string) => {
+  e = task(this, {
+    drop: true
+  }, async (uid: string) => {
     await timeout(1);
   });
 
