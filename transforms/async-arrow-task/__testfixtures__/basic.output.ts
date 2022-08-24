@@ -7,37 +7,37 @@ import { task, timeout } from 'ember-concurrency';
  */
 export default class MyObject {
   // begin comment a
-  a = task(this, async (uid: string) => {
+  a = task(async (uid: string) => {
     await timeout(1);
   });
 
   // end comment a
 
   // begin comment b
-  b = task(this, { drop: true }, async (uid: string) => {
+  b = task({ drop: true }, async (uid: string) => {
     await timeout(1);
   });
 
   // end comment b
 
   // begin comment c
-  c = task(this, { drop: true }, async (uid: string) => {
+  c = task({ drop: true }, async (uid: string) => {
     await timeout(1);
   });
 
   // end comment c
 
-  d = task(this, async (uid: string) => {
+  d = task(async (uid: string) => {
     await timeout(1);
   });
 
-  e = task(this, {
+  e = task({
     drop: true
   }, async (uid: string) => {
     await timeout(1);
   });
 
-  f = task(this, {
+  f = task({
     group: 'myTaskGroup',
     maxConcurrency: 3,
     keepLatest: true,
@@ -48,19 +48,19 @@ export default class MyObject {
     await timeout(1);
   });
 
-  rt = restartableTask(this, async (uid: string) => {
+  rt = restartableTask(async (uid: string) => {
     await timeout(1);
   });
 
-  dt = dropTask(this, async (uid: string) => {
+  dt = dropTask(async (uid: string) => {
     await timeout(1);
   });
 
-  et = enqueueTask(this, async (uid: string) => {
+  et = enqueueTask(async (uid: string) => {
     await timeout(1);
   });
 
-  klt = keepLatestTask(this, async (uid: string) => {
+  klt = keepLatestTask(async (uid: string) => {
     await timeout(1);
   });
 }

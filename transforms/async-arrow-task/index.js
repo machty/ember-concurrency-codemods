@@ -40,7 +40,7 @@ module.exports = function transformer(file, api) {
   taskApiNames.forEach((taskApiName) => {
     // Transform
     // - ClassMethod:   @task *a(uid: string) { yield timeout(1); }
-    // + ClassProperty: a = task(this, async (uid: string) => { await timeout(1); });
+    // + ClassProperty: a = task(async (uid: string) => { await timeout(1); });
     root
       .find(j.ClassMethod, { decorators: [{ expression: { name: taskApiName } }] })
       .forEach((p) => {
@@ -50,7 +50,7 @@ module.exports = function transformer(file, api) {
 
         let newClassProperty = j.classProperty(
           j.identifier(p.node.key.name),
-          j.callExpression(j.identifier(taskApiName), [j.thisExpression(), asyncArrowFn])
+          j.callExpression(j.identifier(taskApiName), [asyncArrowFn])
         );
         newClassProperty.comments = p.node.comments;
         const q = jp.replaceWith(newClassProperty);
@@ -59,7 +59,7 @@ module.exports = function transformer(file, api) {
 
     // Transform
     // - ClassMethod: @task({ drop: true }) *b(this: MyObject, uid: string) { yield timeout(1); }
-    // + ClassProperty: b = task(this, { drop: true }, async (uid: string) => { await timeout(1); });
+    // + ClassProperty: b = task({ drop: true }, async (uid: string) => { await timeout(1); });
     root
       .find(j.ClassMethod, {
         decorators: [{ expression: { type: 'CallExpression', callee: { name: taskApiName } } }],
@@ -72,11 +72,7 @@ module.exports = function transformer(file, api) {
 
         let newClassProperty = j.classProperty(
           j.identifier(p.node.key.name),
-          j.callExpression(j.identifier(taskApiName), [
-            j.thisExpression(),
-            ...decoratorArgs,
-            asyncArrowFn,
-          ])
+          j.callExpression(j.identifier(taskApiName), [...decoratorArgs, asyncArrowFn])
         );
         newClassProperty.comments = p.node.comments;
         const q = jp.replaceWith(newClassProperty);
@@ -85,7 +81,7 @@ module.exports = function transformer(file, api) {
 
     // Transform
     // - ClassProperty @task(function* (uid: string) { yield timeout(1); }) d: any;
-    // - ClassProperty d = task(this, async (uid: string) => { await timeout(1); });
+    // - ClassProperty d = task(async (uid: string) => { await timeout(1); });
     root
       .find(j.ClassProperty, {
         decorators: [
@@ -107,7 +103,7 @@ module.exports = function transformer(file, api) {
 
         let newClassProperty = j.classProperty(
           j.identifier(p.node.key.name),
-          j.callExpression(j.identifier(taskApiName), [j.thisExpression(), asyncArrowFn])
+          j.callExpression(j.identifier(taskApiName), [asyncArrowFn])
         );
         newClassProperty.comments = p.node.comments;
         const q = jp.replaceWith(newClassProperty);
@@ -116,7 +112,7 @@ module.exports = function transformer(file, api) {
 
     // Transform
     // - ClassProperty: @task(function* (uid: string) { yield timeout(1); }).drop() e: any;
-    // - ClassProperty: e = task(this, { drop: true }, async (uid: string) => { await timeout(1); });
+    // - ClassProperty: e = task({ drop: true }, async (uid: string) => { await timeout(1); });
     root
       .find(j.ClassProperty, {
         decorators: [
@@ -156,11 +152,7 @@ module.exports = function transformer(file, api) {
 
         let newClassProperty = j.classProperty(
           j.identifier(p.node.key.name),
-          j.callExpression(j.identifier(taskApiName), [
-            j.thisExpression(),
-            optionsObject,
-            asyncArrowFn,
-          ])
+          j.callExpression(j.identifier(taskApiName), [optionsObject, asyncArrowFn])
         );
         newClassProperty.comments = p.node.comments;
         const q = jp.replaceWith(newClassProperty);
